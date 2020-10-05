@@ -2,6 +2,7 @@ import unittest
 from selenium import webdriver
 from pages.logIn import PageLogIn
 from pages.inventory import PageInventory
+from pages.cart import PageCart
 import time
 
 
@@ -13,6 +14,7 @@ class Example(unittest.TestCase):
         cls.driver.maximize_window()
         cls.logIn = PageLogIn(cls.driver)
         cls.inventory = PageInventory(cls.driver)
+        cls.cart = PageCart(cls.driver)
     
     def test_a_log_in_with_invalid_credencials(self):
         self.logIn.log_in('locked_out_user', 'secret_sauce')
@@ -43,9 +45,16 @@ class Example(unittest.TestCase):
         self.assertEqual(first_item, 'Sauce Labs Fleece Jacket')
 
     def test_f_add_four_items_to_the_cart(self):
-        for i in range(3):
+        for i in range(4):
             self.inventory.add_new_item_to_cart(i)
             self.assertEqual(self.inventory.get_text(i), 'REMOVE')
+        self.driver.get('https://www.saucedemo.com/cart.html')
+        items = self.driver.find_elements(*self.cart.items_on_cart)
+        self.assertEqual(len(items), 4)
+
+    def test_g_log_out(self):
+        self.inventory.log_out()
+        self.assertEqual(self.driver.current_url, 'https://www.saucedemo.com/index.html')
 
     @classmethod
     def tearDownClass(cls):

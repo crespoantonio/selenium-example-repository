@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from selenium import webdriver
 
 class PageLogIn():
     def __init__(self, driver):

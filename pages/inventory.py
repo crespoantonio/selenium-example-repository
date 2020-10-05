@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from selenium import webdriver
 
 class PageInventory():
     def __init__(self, driver):
@@ -18,11 +19,11 @@ class PageInventory():
         self.driver.find_element(*self.btn_menu).click()
     
     def view_all_items(self):
-        self.open_menu()
+        self.open_menu().click()
         self.driver.find_element(*self.a_all_items).click()
 
     def reset_app(self):
-        self.open_menu()
+        self.open_menu().click()
         self.driver.find_element(*self.a_reset_app).click()
 
     def get_text(self, item):
@@ -37,4 +38,9 @@ class PageInventory():
     def ordery_by_attribute(self, value):
         select = Select(self.driver.find_element(*self.select_product_sort_container))
         select.select_by_value(value)
+
+    def log_out(self):
+        self.open_menu()
+        self.driver.implicitly_wait(5)
+        self.driver.find_element(*self.a_logout).click()
     
